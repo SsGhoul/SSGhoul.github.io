@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - магазин компьютерной техники</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #ff6b6b;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            font-size: 16px;
+            padding-left: 45px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .user-actions a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 16px;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .categories {
+            display: flex;
+            list-style: none;
+        }
+
+        .categories li {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .categories li:hover {
+            background-color: #f0f5ff;
+            color: #4a6491;
+        }
+
+        .categories li.active {
+            background-color: #4a6491;
+            color: white;
+        }
+
+        /* Main content */
+        .main-content {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Filters */
+        .filters {
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .price-range {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .price-range input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .filter-options {
+            list-style: none;
+        }
+
+        .filter-options li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-options input {
+            margin-right: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .apply-btn {
+            background-color: #4a6491;
+            color: white;
+        }
+
+        .reset-btn {
+            background-color: #f0f5ff;
+            color: #4a6491;
+        }
+
+        /* Products */
+        .products {
+            flex-grow: 1;
+        }
+
+        .sorting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sorting select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            height: 180px;
+            background-color: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .product-price {
+            color: #4a6491;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-rating {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background-color: #4a6491;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #3a5481;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #3a5481;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-form input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .payment-form button {
+            padding: 12px;
+            background-color: #4a6491;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .cart-items {
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .filters {
+                width: 100%;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-bar {
+                margin: 15px 0;
+            }
+            
+            .nav-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo" id="homeLink">
+                <i class="fas fa-laptop-code"></i>
+                TechStore
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Поиск товаров..." id="searchInput">
+            </div>
+            <div class="user-actions">
+                <a href="#" id="cartLink"><i class="fas fa-shopping-cart"></i> Корзина <span id="cartCount">0</span></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <ul class="categories">
+                <li class="active" data-category="all">Все товары</li>
+                <li data-category="laptops">Ноутбуки</li>
+                <li data-category="computers">Компьютеры</li>
+                <li data-category="monitors">Мониторы</li>
+                <li data-category="components">Комплектующие</li>
+                <li data-category="peripherals">Периферия</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container main-content">
+        <!-- Filters -->
+        <aside class="filters">
+            <div class="filter-group">
+                <h3>Цена, руб.</h3>
+                <div class="price-range">
+                    <input type="number" placeholder="от 0" id="priceMin">
+                    <input type="number" placeholder="до 100000" id="priceMax">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h3>Производитель</h3>
+                <ul class="filter-options" id="brandFilters">
+                    <li><input type="checkbox" value="ASUS"> ASUS</li>
+                    <li><input type="checkbox" value="Acer"> Acer</li>
+                    <li><input type="checkbox" value="Lenovo"> Lenovo</li>
+                    <li><input type="checkbox" value="HP"> HP</li>
+                    <li><input type="checkbox" value="Dell"> Dell</li>
+                    <li><input type="checkbox" value="Apple"> Apple</li>
+                </ul>
+            </div>
+
+            <div class="filter-group">
+                <h3>Процессор</h3>
+                <ul class="filter-options" id="cpuFilters">
+                    <li><input type="checkbox" value="Intel Core i3"> Intel Core i3</li>
+                    <li><input type="checkbox" value="Intel Core i5"> Intel Core i5</li>
+                    <li><input type="checkbox" value="Intel Core i7"> Intel Core i7</li>
+                    <li><input type="checkbox" value="AMD Ryzen 5"> AMD Ryzen 5</li>
+                    <li><input type="checkbox" value="AMD Ryzen 7"> AMD Ryzen 7</li>
+                </ul>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="apply-btn" id="applyFilters">Применить</button>
+                <button class="reset-btn" id="resetFilters">Сбросить</button>
+            </div>
+        </aside>
+
+        <!-- Products -->
+        <section class="products">
+            <div class="sorting">
+                <div id="productsCount">Найдено 12 товаров</div>
+                <div>
+                    <span>Сортировка: </span>
+                    <select id="sortSelect">
+                        <option value="default">По популярности</option>
+                        <option value="price_asc">По возрастанию цены</option>
+                        <option value="price_desc">По убыванию цены</option>
+                        <option value="name">По названию</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="product-grid" id="productGrid">
+                <!-- Товары будут добавляться динамически -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>О компании</h3>
+                <ul>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Контакты</a></li>
+                    <li><a href="#">Вакансии</a></li>
+                    <li><a href="#">Новости</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Помощь</h3>
+                <ul>
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Гарантия</a></li>
+                    <li><a href="#">Возврат товара</a></li>
+                    <li><a href="#">Частые вопросы</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <ul>
+                    <li>+7 (800) 123-45-67</li>
+                    <li>support@techstore.ru</li>
+                    <li>Москва, ул. Техническая, 15</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container copyright">
+            &copy; 2025 TechStore - Магазин компьютерной техники
+        </div>
+    </footer>
+
+    <!-- Модальное окно корзины -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Корзина</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Товары в корзине -->
+            </div>
+            <div style="text-align: right; font-weight: bold; margin: 15px 0;">
+                Итого: <span id="cartTotal">0</span> руб.
+            </div>
+            <button id="checkoutBtn" style="width: 100%; padding: 12px; background-color: #4a6491; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Перейти к оплате
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно оплаты -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Оформление заказа</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="payment-form">
+                <input type="text" placeholder="Ваше имя" id="customerName">
+                <input type="email" placeholder="Email" id="customerEmail">
+                <input type="tel" placeholder="Телефон" id="customerPhone">
+                <input type="text" placeholder="Адрес доставки" id="customerAddress">
+                <button id="payBtn">Оплатить через СБП</button>
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <p>После подтверждения заказа вы получите SMS с реквизитами для оплаты на номер <strong>89026873147</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Заказ оформлен!</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+                <i class="fas fa-check-circle" style="font-size: 48px; color: green;"></i>
+                <p style="margin: 20px 0;">Ваш заказ успешно оформлен. Для завершения оплаты переведите сумму <span id="finalAmount">0</span> руб. по СБП на номер <strong>89026873147</strong></p>
+                <p>После оплаты заказ будет обработан и отправлен в течение 24 часов.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные товаров
+        const products = [
+            { id: 1, name: "Ноутбук ASUS VivoBook 15", price: 54990, category: "laptops", brand: "ASUS", cpu: "Intel Core i5", image: "https://via.placeholder.com/200?text=ASUS+VivoBook", rating: 4.5 },
+            { id: 2, name: "Ноутбук Acer Nitro 5", price: 76990, category: "laptops", brand: "Acer", cpu: "Intel Core i7", image: "https://via.placeholder.com/200?text=Acer+Nitro", rating: 4.2 },
+            { id: 3, name: "Ноутбук Lenovo IdeaPad 3", price: 42490, category: "laptops", brand: "Lenovo", cpu: "AMD Ryzen 5", image: "https://via.placeholder.com/200?text=Lenovo+IdeaPad", rating: 4.0 },
+            { id: 4, name: "Игровой компьютер", price: 89990, category: "computers", brand: "Dell", cpu: "Intel Core i7", image: "https://via.placeholder.com/200?text=Gaming+PC", rating: 4.8 },
+            { id: 5, name: "Офисный компьютер", price: 34990, category: "computers", brand: "HP", cpu: "Intel Core i3", image: "https://via.placeholder.com/200?text=Office+PC", rating: 4.1 },
+            { id: 6, name: "Монитор Samsung 27''", price: 25990, category: "monitors", brand: "Samsung", cpu: "", image: "https://via.placeholder.com/200?text=Samsung+Monitor", rating: 4.7 },
+            { id: 7, name: "Монитор LG UltraGear", price: 38990, category: "monitors", brand: "LG", cpu: "", image: "https://via.placeholder.com/200?text=LG+UltraGear", rating: 4.6 },
+            { id: 8, name: "Видеокарта NVIDIA RTX 4060", price: 45990, category: "components", brand: "NVIDIA", cpu: "", image: "https://via.placeholder.com/200?text=RTX+4060", rating: 4.9 },
+            { id: 9, name: "Процессor Intel Core i9", price: 52990, category: "components", brand: "Intel", cpu: "Intel Core i9", image: "https://via.placeholder.com/200?text=Intel+i9", rating: 5.0 },
+            { id: 10, name: "Клавиатура Logitech Mechanical", price: 8990, category: "peripherals", brand: "Logitech", cpu: "", image: "https://via.placeholder.com/200?text=Logitech+KB", rating: 4.4 },
+            { id: 11, name: "Мышь Razer DeathAdder", price: 5990, category: "peripherals", brand: "Razer", cpu: "", image: "https://via.placeholder.com/200?text=Razer+Mouse", rating: 4.5 },
+            { id: 12, name: "Ноутбук Apple MacBook Air", price: 104990, category: "laptops", brand: "Apple", cpu: "Apple M1", image: "https://via.placeholder.com/200?text=MacBook+Air", rating: 4.8 }
+        ];
+
+        // Переменные состояния
+        let cart = [];
+        let currentCategory = 'all';
+        let filteredProducts = [...products];
+
+        // DOM элементы
+        const productGrid = document.getElementById('productGrid');
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const productsCount = document.getElementById('productsCount');
+        const categoryItems = document.querySelectorAll('.categories li');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const priceMin = document.getElementById('priceMin');
+        const priceMax = document.getElementById('priceMax');
+        const brandFilters = document.querySelectorAll('#brandFilters input');
+        const cpuFilters = document.querySelectorAll('#cpuFilters input');
+        const applyFilters = document.getElementById('applyFilters');
+        const resetFilters = document.getElementById('resetFilters');
+        const cartModal = document.getElementById('cartModal');
+        const paymentModal = document.getElementById('paymentModal');
+        const successModal = document.getElementById('successModal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const payBtn = document.getElementById('payBtn');
+        const finalAmount = document.getElementById('finalAmount');
+        const cartLink = document.getElementById('cartLink');
+        const homeLink = document.getElementById('homeLink');
+        const closeButtons = document.querySelectorAll('.close');
+
+        // Инициализация
+        function init() {
+            renderProducts(products);
+            setupEventListeners();
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Категории
+            categoryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    categoryItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    currentCategory = item.dataset.category;
+                    applyFiltersHandler();
+                });
+            });
+
+            // Поиск
+            searchInput.addEventListener('input', applyFiltersHandler);
+
+            // Сортировка
+            sortSelect.addEventListener('change', applyFiltersHandler);
+
+            // Фильтры
+            applyFilters.addEventListener('click', applyFiltersHandler);
+            resetFilters.addEventListener('click', resetFiltersHandler);
+
+            // Корзина
+            cartLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showCart();
+            });
+
+            homeLink.addEventListener('click', () => {
+                currentCategory = 'all';
+                categoryItems.forEach(i => {
+                    i.classList.remove('active');
+                    if (i.dataset.category === 'all') i.classList.add('active');
+                });
+                resetFiltersHandler();
+            });
+
+            // Оформление заказа
+            checkoutBtn.addEventListener('click', showPaymentModal);
+            payBtn.addEventListener('click', processPayment);
+
+            // Закрытие модальных окон
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    cartModal.style.display = 'none';
+                    paymentModal.style.display = 'none';
+                    successModal.style.display = 'none';
+                });
+            });
+
+            // Закрытие при клике вне окна
+            window.addEventListener('click', (e) => {
+                if (e.target === cartModal) cartModal.style.display = 'none';
+                if (e.target === paymentModal) paymentModal.style.display = 'none';
+                if (e.target === successModal) successModal.style.display = 'none';
+            });
+        }
+
+        // Отображение товаров
+        function renderProducts(productsArray) {
+            productGrid.innerHTML = '';
+            productsCount.textContent = `Найдено ${productsArray.length} товаров`;
+
+            productsArray.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price">${product.price.toLocaleString()} руб.</div>
+                        <div class="product-rating">
+                            ${renderRating(product.rating)}
+                        </div>
+                        <button class="add-to-cart" data-id="${product.id}">В корзину</button>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+
+            // Добавление обработчиков для кнопок "В корзину"
+            document.querySelectorAll('.add-to-cart').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.dataset.id);
+                    addToCart(id);
+                });
+            });
+        }
+
+        // Отображение рейтинга
+        function renderRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // Добавление в корзину
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    image: product.image
+                });
+            }
+
+            updateCartCount();
+            alert(`Товар "${product.name}" добавлен в корзину!`);
+        }
+
+        // Обновление счетчика корзины
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        // Показать корзину
+        function showCart() {
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Корзина пуста</p>';
+            } else {
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div>${item.name} x${item.quantity}</div>
+                        <div>${itemTotal.toLocaleString()} руб.</div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+            }
+
+            cartTotal.textContent = total.toLocaleString();
+            cartModal.style.display = 'flex';
+        }
+
+        // Обработчик фильтров
+        function applyFiltersHandler() {
+            let result = [...products];
+
+            // Фильтр по категории
+            if (currentCategory !== 'all') {
+                result = result.filter(product => product.category === currentCategory);
+            }
+
+            // Фильтр по поиску
+            const searchText = searchInput.value.toLowerCase();
+            if (searchText) {
+                result = result.filter(product => 
+                    product.name.toLowerCase().includes(searchText) ||
+                    product.brand.toLowerCase().includes(searchText)
+                );
+            }
+
+            // Фильтр по цене
+            const minPrice = priceMin.value ? parseInt(priceMin.value) : 0;
+            const maxPrice = priceMax.value ? parseInt(priceMax.value) : Number.MAX_SAFE_INTEGER;
+            result = result.filter(product => product.price >= minPrice && product.price <= maxPrice);
+
+            // Фильтр по бренду
+            const selectedBrands = Array.from(brandFilters)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+            
+            if (selectedBrands.length > 0) {
+                result = result.filter(product => selectedBrands.includes(product.brand));
+            }
+
+            // Фильтр по процессору
+            const selectedCpus = Array.from(cpuFilters)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+            
+            if (selectedCpus.length > 0) {
+                result = result.filter(product => selectedCpus.includes(product.cpu));
+            }
+
+            // Сортировка
+            const sortOption = sortSelect.value;
+            switch (sortOption) {
+                case 'price_asc':
+                    result.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price_desc':
+                    result.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    result.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                default:
+                    // По умолчанию - по рейтингу
+                    result.sort((a, b) => b.rating - a.rating);
+            }
+
+            filteredProducts = result;
+            renderProducts(result);
+        }
+
+        // Сброс фильтров
+        function resetFiltersHandler() {
+            searchInput.value = '';
+            priceMin.value = '';
+            priceMax.value = '';
+            brandFilters.forEach(checkbox => checkbox.checked = false);
+            cpuFilters.forEach(checkbox => checkbox.checked = false);
+            sortSelect.value = 'default';
+            applyFiltersHandler();
+        }
+
+        // Показать окно оплаты
+        function showPaymentModal() {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+
+            cartModal.style.display = 'none';
+            paymentModal.style.display = 'flex';
+        }
+
+        // Обработка оплаты
+        function processPayment() {
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            const phone = document.getElementById('customerPhone').value;
+            const address = document.getElementById('customerAddress').value;
+
+            if (!name || !email || !phone || !address) {
+                alert('Пожалуйста, заполните все поля!');
+                return;
+            }
+
+            // Расчет итоговой суммы
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            finalAmount.textContent = total.toLocaleString();
+
+            // Показать окно подтверждения
+            paymentModal.style.display = 'none';
+            successModal.style.display = 'flex';
+
+            // Очистка корзины
+            cart = [];
+            updateCartCount();
+
+            // Очистка формы
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerEmail').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerAddress').value = '';
+        }
+
+        // Запуск приложения
+        init();
+    </script>
+</body>
+</html>
